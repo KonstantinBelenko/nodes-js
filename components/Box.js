@@ -14,8 +14,8 @@ function Box(props) {
 
     // Subscribe this component to the render-loop, rotate the mesh every frame
     useFrame(({ clock }) => {
-    mesh.current.rotation.z += amplitude * Math.sin(clock.elapsedTime+1.5);
-    mesh.current.rotation.y += amplitude * Math.sin(clock.elapsedTime+1.5);
+        mesh.current.rotation.z += amplitude * Math.sin(clock.elapsedTime+1.5);
+        mesh.current.rotation.y += amplitude * Math.sin(clock.elapsedTime+1.5);
     })
     // Return view, these are regular three.js elements expressed in JSX
     return (
@@ -24,7 +24,8 @@ function Box(props) {
             ref={mesh}
             scale={hovered ? 1.01 : 1}
             onPointerOver={(event) => {setHover(true); props.setHovered(true)}}
-            onPointerOut={(event) => {setHover(false); props.setHovered(false)}}>
+            onPointerOut={(event) => {setHover(false); props.setHovered(false)}}
+            onClick={props.onClick}>
             <boxGeometry args={props.args} />
             <meshStandardMaterial color={'hotpink'} />
         </mesh>
