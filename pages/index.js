@@ -1,49 +1,31 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
-import { useRef, useState, useEffect } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { OrbitControls, Stats, Text } from "@react-three/drei";
+import { useState, useEffect, useRef, createContext, Fragment } from 'react'
 
-export default function Home() {
+import Box from '../components/Box'
+
+const camContext = createContext()
+function Controls({ children }) {
+  const { gl, camera } = useThree()
+  const api = useState(true)
+  return (
+    <Fragment>
+      <OrbitControls enableRotate={false} args={[camera, gl.domElement]} enableDamping enabled={api[0]} />
+      <camContext.Provider value={api}>{children}</camContext.Provider>
+    </Fragment>
+  )
+}
+
+export default function Home() {  
 
   // Hover logic
   const [hovered, setHovered] = useState(false);
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto'
   }, [hovered])
-
-  function Box(props) {
-
-	  // This reference will give us direct access to the mesh
-	  const mesh = useRef()
-
-	  // Set up state for the hovered state
-	  const [hovered, setHover] = useState(false)
-
-      // Animation settings
-	  let amplitude = 0.003;
-
-	  // Subscribe this component to the render-loop, rotate the mesh every frame
-	  useFrame(({ clock }) => {
-      mesh.current.rotation.z += amplitude * Math.sin(clock.elapsedTime+1.5);
-      mesh.current.rotation.y += amplitude * Math.sin(clock.elapsedTime+1.5);
-	  })
-	  // Return view, these are regular three.js elements expressed in JSX
-	  return (
-		<mesh
-		  {...props}
-		  position={props.position}
-		  ref={mesh}
-		  scale={hovered ? 1.1 : 1}
-		  onPointerOver={(event) => {setHover(true); setHovered(true)}}
-		  onPointerOut={(event) => {setHover(false); setHovered(false)}}>
-		  <boxGeometry args={[1, 1.3, 0.2]} />
-		  <meshStandardMaterial color={'hotpink'} />
-		</mesh>
-	  )
-	}
-
 
   return (
     <div className={styles.container}>
@@ -54,13 +36,22 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Canvas camera={{fov: 65}}>
+        <Canvas camera={{fov: 65}} ><Controls>
           <color attach="background" args={['black']} />
           <ambientLight intensity={0.1} />
           <directionalLight color="white" position={[10, 10, 10]} />
           
-          <Box position={[0, 0, 3]}/>
-        </Canvas>
+          <Text
+            position={[0, 0.8, 3]}
+            scale={[1.3, 1.3, 1.3]}
+            color="white" // default
+            anchorX="center" // default
+            anchorY="middle" // default
+          >
+            Web Works
+          </Text>
+          <Box position={[0, -0.2, 3]} args={[1, 1.3, 0.2]} amplitude={0.0005} setHovered={setHovered}/>
+        </Controls></Canvas>
       </main>
 
     </div>
