@@ -22,13 +22,12 @@ export default function Home() {
 	  const [hovered, setHover] = useState(false)
 
       // Animation settings
-	  let amplitude = 0.0003;
-	  let magnitude = 0.5;
+	  let amplitude = 0.003;
 
 	  // Subscribe this component to the render-loop, rotate the mesh every frame
 	  useFrame(({ clock }) => {
-      mesh.current.rotation.z += Math.sin(clock.elapsedTime*magnitude) * amplitude;
-      mesh.current.rotation.y += Math.sin(clock.elapsedTime*magnitude) * amplitude;
+      mesh.current.rotation.z += amplitude * Math.sin(clock.elapsedTime+1.5);
+      mesh.current.rotation.y += amplitude * Math.sin(clock.elapsedTime+1.5);
 	  })
 	  // Return view, these are regular three.js elements expressed in JSX
 	  return (
@@ -39,7 +38,7 @@ export default function Home() {
 		  scale={hovered ? 1.1 : 1}
 		  onPointerOver={(event) => {setHover(true); setHovered(true)}}
 		  onPointerOut={(event) => {setHover(false); setHovered(false)}}>
-		  <boxGeometry args={[1, 1.3, 1]} />
+		  <boxGeometry args={[1, 1.3, 0.2]} />
 		  <meshStandardMaterial color={'hotpink'} />
 		</mesh>
 	  )
