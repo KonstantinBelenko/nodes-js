@@ -5,7 +5,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, Stats, Text } from "@react-three/drei";
 import { useState, useEffect, useRef, createContext, Fragment } from 'react'
 
-import Box from '../components/Box'
+import Node from '../components/Node'
 
 const camContext = createContext()
 function Controls({ children }) {
@@ -27,6 +27,10 @@ export default function Home() {
     document.body.style.cursor = hovered ? 'pointer' : 'auto'
   }, [hovered])
 
+  const Press = () => {
+    alert("Login")
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -41,16 +45,15 @@ export default function Home() {
           <ambientLight intensity={0.1} />
           <directionalLight color="white" position={[10, 10, 10]} />
           
-          <Text
-            position={[0, 0.8, 3]}
-            scale={[1.3, 1.3, 1.3]}
-            color="white" // default
-            anchorX="center" // default
-            anchorY="middle" // default
-          >
-            Web Works
-          </Text>
-          <Box position={[0, -0.2, 3]} args={[1, 1.3, 0.2]} amplitude={0.0005} setHovered={setHovered}/>
+          <Node 
+            position    = {[0, -0.2, 3]} 
+            args        = {[1, 1.3, 0.2]} 
+            amplitude   = {0.0005} 
+            setHovered  = {setHovered}
+            text        = {"Web Works"}
+            onClick      = {Press}
+          />
+        
         </Controls></Canvas>
       </main>
 
